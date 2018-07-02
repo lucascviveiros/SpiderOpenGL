@@ -1,12 +1,3 @@
-/*
-	Jonathan Dummer
-	2007-07-31-10.32
-
-	simple DXT compression / decompression code
-
-	public domain
-*/
-
 #include "image_DXT.h"
 #include <math.h>
 #include <stdlib.h>

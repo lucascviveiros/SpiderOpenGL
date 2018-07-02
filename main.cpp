@@ -23,30 +23,22 @@ use "< or >" to rotate spider until 195 to place on the wall then use key "a" to
 #include <GL\glut.h>
 #include "SOIL/SOIL.h"
 
-float ang = 5;
-float ang2 = 325;
-float ang3 = 320;
-int kf1 =0;
-int jp =0;
-int jpb=0;
-int xt=+5;
-int k1=0;
-int k2=0;
-int p=0;
-int time = 30;
-int tr=3; //change texture background
+//Global Control Variables
+float ang = 5, ang2 = 325, ang3 = 320;
+int kf1 =0, jp =0, jpb=0, xt=+5, k1=0, k2=0, p=0, time = 30, tr=3; //change texture background
+//3D Objects
 GLUquadric *quad;
 GLUquadricObj *leg;
+//Texture
+GLuint texture[7];
+//Perspective Cam
 static GLfloat pers = 100.0;
-GLuint texture[7], indiceTextura=0;
 void display();
 
 int LoadGLTextures(){
     // load an image file directly as a new OpenGL texture
-
     texture[2] = SOIL_load_OGL_texture ( "/your_directory/body.jpg",
         SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID,SOIL_FLAG_INVERT_Y);
-
     // cobweb
     texture[3] = SOIL_load_OGL_texture ( "/your_directory/background.jpg",
         SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID,SOIL_FLAG_INVERT_Y);
@@ -110,13 +102,13 @@ void Bone::draw(){
 
 class Paw {
 public:
-    Paw(float comprimento, float width);
+    Paw(float length, float width);
     void draw() {
         a.draw();
     }
-    void setCurvetoA(float curvatura);
+    void setCurvetoA(float curvA);
 
-    void setCurvetoB(float curvatura);
+    void setCurvetoB(float curvA);
 
     float getCurvetoA(){
         return a.getangle();
@@ -130,30 +122,30 @@ protected:
     Bone a,b,c;
 };
 
-Paw::Paw(float comprimento, float width)
-  : a(comprimento*0.7,width), b(comprimento*0.5,width), c(comprimento*0.4,width) {
+Paw::Paw(float length, float width)
+  : a(length*0.7,width), b(length*0.5,width), c(length*0.4,width) {
     a.setconnection(&b,100.0); //Bone connection
     b.setconnection(&c,35.0); // Initial angle tip
 }
 
-void Paw::setCurvetoB(float curvatura){
-    b.setangle(curvatura);
+void Paw::setCurvetoB(float curvA){
+    b.setangle(curvA);
 }
 
-void Paw::setCurvetoA(float curvatura){
-    a.setangle(curvatura);
+void Paw::setCurvetoA(float curvA){
+    a.setangle(curvA);
 }
 
 class Spider {
 public:
     Spider(float size);
     void draw();
-    void setCurveto(int dedo,float curv);
-    void setCurvetoA(int dedo,float curv);
-    void setCurvetoB(int dedo,float curv);
-    void setCurvetoL(int dedo,float curv);
-    float getCurveto(int numPaw){return curvatura[numPaw];}
-    float getCurvetoL(int numPaw2){return curvaturaL[numPaw2];}
+    void setCurveto(int paws,float curv);
+    void setCurvetoA(int paws,float curv);
+    void setCurvetoB(int paws,float curv);
+    void setCurvetoL(int paws,float curv);
+    float getCurveto(int numPaw){return curvA[numPaw];}
+    float getCurvetoL(int numPaw2){return curvAL[numPaw2];}
     float getCurvetoA(int numPaw){
         switch(numPaw){
             case 0: return pf1.getCurvetoA(); break;
@@ -223,8 +215,8 @@ protected:
     Paw pt7;
     Paw pt8;
 
-    float curvatura[8];
-    float curvaturaL[8];
+    float curvA[8];
+    float curvAL[8];
 };
 
 Spider::Spider(float gros)
@@ -239,8 +231,8 @@ Spider::Spider(float gros)
   pt8(4*size,size) {
 
         for(int i=0; i<8; i++){
-            curvatura[i]=-115;
-            curvaturaL[i]=0;
+            curvA[i]=-115;
+            curvAL[i]=0;
         }
 }
 
@@ -253,8 +245,8 @@ void Spider::draw(){
     glPushMatrix();
     glTranslatef(5.5+kf1,-1,3);
     glRotatef(-75,0,1,0);
-    glRotatef(curvatura[0]*0.9,1.0,0.0,0.0);
-    glRotatef(curvaturaL[0]*0.9,0.0, 0.0, 1.0);
+    glRotatef(curvA[0]*0.9,1.0,0.0,0.0);
+    glRotatef(curvAL[0]*0.9,0.0, 0.0, 1.0);
     pf1.draw();
     glPopMatrix();
 
@@ -265,8 +257,8 @@ void Spider::draw(){
     glRotatef(75,0,1,0);
     glRotatef(k2,1,0,0);
     glRotatef(10,0,1,0);
-    glRotatef(curvatura[1]*0.9,1.0,0.0,0.0);
-    glRotatef(curvaturaL[1]*0.9,0.0, 0.0, 1.0);
+    glRotatef(curvA[1]*0.9,1.0,0.0,0.0);
+    glRotatef(curvAL[1]*0.9,0.0, 0.0, 1.0);
     pf2.draw();
     glPopMatrix();
 
@@ -275,8 +267,8 @@ void Spider::draw(){
     glTranslatef(7+kf1,-1,2);
     glTranslatef(-3*size,0.0,0.0);
     glRotatef(-35,0,1,0);
-    glRotatef(curvatura[2]*0.9,1.0,0.0,0.0);
-    glRotatef(curvaturaL[2]*0.9,0.0, 0.0, 1.0);
+    glRotatef(curvA[2]*0.9,1.0,0.0,0.0);
+    glRotatef(curvAL[2]*0.9,0.0, 0.0, 1.0);
     pl3.draw();
     glPopMatrix();
 
@@ -284,8 +276,8 @@ void Spider::draw(){
     glPushMatrix();
     glTranslatef(4+kf1,-1,6);
     glRotatef(-145,0,1,0);
-    glRotatef(curvatura[3]*0.9,1.0,0.0,0.0);
-    glRotatef(curvaturaL[3]*0.9,0.0, 0.0, 1.0);
+    glRotatef(curvA[3]*0.9,1.0,0.0,0.0);
+    glRotatef(curvAL[3]*0.9,0.0, 0.0, 1.0);
     pl4.draw();
     glPopMatrix();
 
@@ -293,8 +285,8 @@ void Spider::draw(){
     glPushMatrix();
     glRotatef(20,0,1,0);
     glTranslatef(-3+kf1,-1,1);
-    glRotatef(curvatura[6]*0.9,1.0,0.0,0.0);
-    glRotatef(curvaturaL[6]*0.9,0.0, 0.0, 1.0);
+    glRotatef(curvA[6]*0.9,1.0,0.0,0.0);
+    glRotatef(curvAL[6]*0.9,0.0, 0.0, 1.0);
     pt7.draw();
     glPopMatrix();
 
@@ -302,8 +294,8 @@ void Spider::draw(){
     glPushMatrix();
     glRotatef(160,0,1,0);
     glTranslatef(0-kf1,-1,-7);
-    glRotatef(curvaturaL[7]*0.9,0.0, 0.0, 1.0);
-    glRotatef(curvatura[7]*0.9,1.0,0.0,0.0);
+    glRotatef(curvAL[7]*0.9,0.0, 0.0, 1.0);
+    glRotatef(curvA[7]*0.9,1.0,0.0,0.0);
     pt8.draw();
     glPopMatrix();
 
@@ -312,8 +304,8 @@ void Spider::draw(){
     glRotatef(10,0,1,0);
     glTranslatef(-1+kf1,0,1);
     glTranslatef(2.5,-1,2);
-    glRotatef(curvatura[4]*0.9,1.0,0.0,0.0);
-    glRotatef(curvaturaL[4]*0.9,0.0, 0.0, 1.0);
+    glRotatef(curvA[4]*0.9,1.0,0.0,0.0);
+    glRotatef(curvAL[4]*0.9,0.0, 0.0, 1.0);
     pl5.draw();
     glPopMatrix();
 
@@ -321,8 +313,8 @@ void Spider::draw(){
     glPushMatrix();
     glRotatef(170,0,1,0);
     glTranslatef(-3-kf1,-1,-5);
-    glRotatef(curvatura[5]*0.9,1.0,0.0,0.0);
-    glRotatef(curvaturaL[5]*0.9,0.0, 0.0, 1.0);
+    glRotatef(curvA[5]*0.9,1.0,0.0,0.0);
+    glRotatef(curvAL[5]*0.9,0.0, 0.0, 1.0);
     pl6.draw();
     glPopMatrix();
 
@@ -372,11 +364,11 @@ void cobweb(){
 }
 
 void Spider::setCurveto(int numPaw,float curv) {
-    curvatura[numPaw] = curv;
+    curvA[numPaw] = curv;
 }
 
 void Spider::setCurvetoL(int numPaw2, float curv){
-    curvaturaL[numPaw2] = curv;
+    curvAL[numPaw2] = curv;
 }
 
 void Spider::setCurvetoA(int numPaw,float curv) {
@@ -422,7 +414,7 @@ void Spider::aliveSpider(){
         display();
     }
     for(int i=0; i<8; i++){
-        curvatura[i]=-115*10/9;
+        curvA[i]=-115*10/9;
     }
 }
 
@@ -703,14 +695,14 @@ void Spider::walkSpider(){
                 movP62();
             }
         }
-        curvatura[0]=-115*10/9; //adjunsting angle
-        curvatura[1]=-115*10/9;
-        curvatura[2]=-115*10/9;
-        curvatura[3]=-115*10/9;
-        curvatura[4]=-115*10/9;
-        curvatura[5]=-115*10/9;
-        curvatura[6]=-115*10/9;
-        curvatura[7]=-115*10/9;
+        curvA[0]=-115*10/9; //adjunsting angle
+        curvA[1]=-115*10/9;
+        curvA[2]=-115*10/9;
+        curvA[3]=-115*10/9;
+        curvA[4]=-115*10/9;
+        curvA[5]=-115*10/9;
+        curvA[6]=-115*10/9;
+        curvA[7]=-115*10/9;
         }
 }
 
@@ -973,7 +965,6 @@ int main(int argc, char** argv){
     glutDisplayFunc(display);
     glutReshapeFunc(reshape);
     glutKeyboardFunc(keyboard);
-//    glutSpecialFunc(TeclasEspeciais);
     glutMainLoop();
 
     if(!LoadGLTextures()){
