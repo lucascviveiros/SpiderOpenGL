@@ -555,3 +555,12 @@
 
 1215465208 c:\users\kazz\documents\github\spideropengl\soil\stbi_dds_aug_c.h
 
+1530533234 source:c:\users\kazz\documents\github\spideropengl\main.cpp
+	<windows.h>
+	<gl/glu.h>
+	<stdio.h>
+	<stdlib.h>
+	<GL\gl.h>
+	<GL\glut.h>
+	"SOIL/SOIL.h"
+

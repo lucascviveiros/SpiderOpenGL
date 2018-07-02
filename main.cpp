@@ -9,7 +9,8 @@ key [ or ] - top rotation
 key < or > - side rotation
 key 1 - die spider
 key 2 - revive spider
-key 3 - jump spider (restart program to walk or fix it ;)
+key 3 - jump spider
+(restart to walk)
 
 use "< or >" to rotate spider until 195 to place on the wall then use key "a" to climb
 *****************************************************************************
