@@ -1,7 +1,6 @@
 /*
 ***********************************
 SPIDER PROJECT 2016/01 - MEDIANEIRA[UTFPR]
-Academic: LUCAS CAVALCANTI VIVEIROS
 
 key a - spider walk
 key s - push back
