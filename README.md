@@ -1,5 +1,6 @@
 # SpiderOpenGL
-This program simulates the movements of a spider using OpenGL and C++
+
+Spider movement simulation by using C++ and OpenGL 
 
 Make sure you have the OpenGL libraries installed
 
